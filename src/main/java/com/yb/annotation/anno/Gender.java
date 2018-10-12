@@ -32,5 +32,6 @@ public @interface Gender {
         }
     }
     //设置注解体(默认性别男)
+    //把注解的参数值设定为自己定义的枚举,让使用者选择自己定义的枚举
     GenderType value() default GenderType.MALE;
 }

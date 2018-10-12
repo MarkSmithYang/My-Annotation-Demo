@@ -24,7 +24,8 @@ public class AnnoHandler {
     public static final Logger log = LoggerFactory.getLogger(AnnoHandler.class);
 
     // 用@PointCut注解统一声明,然后在其它通知中引用该统一声明即可！
-    @Pointcut("@annotation(com.yb.annotation.anno.SetVaule)")
+//    @Pointcut("@annotation(com.yb.annotation.anno.SetVaule)")
+    @Pointcut(value = "execution(* com.yb.annotation.model..*.*(..)) && @annotation(com.yb.annotation.anno.SetVaule)")
     public void setVaulePointcut() {
     }
 

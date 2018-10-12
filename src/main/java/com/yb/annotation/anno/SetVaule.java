@@ -1,6 +1,5 @@
 package com.yb.annotation.anno;
 
-import org.springframework.context.annotation.Configuration;
 
 import java.lang.annotation.*;
 
@@ -10,9 +9,10 @@ import java.lang.annotation.*;
  * @date 2018/10/10
  */
 @Documented
-@Target(ElementType.FIELD)
+@Target({ElementType.FIELD,ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited//此注解允许被使用类的子类继承(实现接口和重载方法不遵循此)
 public @interface SetVaule {
-    String value() default "";
+    String value();
+//    String value() default "";
 }
