@@ -12,7 +12,8 @@ import java.lang.annotation.*;
 @Target({ElementType.FIELD,ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited//此注解允许被使用类的子类继承(实现接口和重载方法不遵循此)
-public @interface SetVaule {
-    String value();
+public @interface Age {
+    int value();
 //    String value() default "";
+    String message();
 }

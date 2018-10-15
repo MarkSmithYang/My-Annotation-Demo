@@ -11,6 +11,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.xml.transform.Result;
 import java.util.*;
 
 /**
@@ -53,7 +55,6 @@ public class TeacherService {
             //这里是随意抛的一个异常,实际情况不能这么做,会影响判断的,最好自己定义一个来使用
             throw new NoSuchFieldError("id不能为空");
         }
-
         //查询信息
         //通过这个模板,可以通过map封装参数,看到网上使用变量(:xxx)来占位的,所以只要变量和map的key对应即可
         //但是我想用?来占位,这个肯定是要根据顺序来的,所以用LinkedHashMap来保持有序
@@ -141,5 +142,17 @@ public class TeacherService {
             return teacher;
         });
         return t;
+    }
+
+    /**
+     * 查询Teacher的List信息
+     * @return
+     */
+    public List<Teacher> queryForList() {
+        List<Map<String, Object>> maps = jdbcTemplate.queryForList("select * from teacher");
+
+
+        List<Teacher> result = new ArrayList<>();
+        return result;
     }
 }

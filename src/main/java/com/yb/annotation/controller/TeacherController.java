@@ -27,6 +27,12 @@ public class TeacherController {
         return result;
     }
 
+    @GetMapping("queryForList")
+    public List<Teacher> queryForList() {
+        List<Teacher> result = teacherService.queryForList();
+        return result;
+    }
+
     @GetMapping("bb")
     public Teacher findById(String id) {
         Teacher result = teacherService.findById(id);

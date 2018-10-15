@@ -1,7 +1,6 @@
 package com.yb.annotation.model;
 
 import com.yb.annotation.anno.Gender;
-import com.yb.annotation.anno.SetVaule;
 import java.io.Serializable;
 
 /**
@@ -15,26 +14,22 @@ public class Teacher implements Serializable {
     /**
      * id
      */
-    @SetVaule(value = "1")
     @Gender(value = Gender.GenderType.FEMALE)//把注解的参数值设定为自己定义的枚举,让使用者选择自己定义的枚举
     private String id;
 
     /**
      * 姓名
      */
-    @SetVaule("劉老師")
     private String name;
 
     /**
      * 年龄
      */
-    @SetVaule("19")
     private Integer age;
 
     /**
      * 班级
      */
-    @SetVaule("终极一班")
     private String className;
 
     public String getId() {
@@ -45,12 +40,10 @@ public class Teacher implements Serializable {
         this.id = id;
     }
 
-    @SetVaule("你好")
     public String getName() {
         return name;
     }
 
-    @SetVaule("我不好")
     public void setName(String name) {
         this.name = name;
     }
