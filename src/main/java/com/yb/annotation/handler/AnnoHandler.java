@@ -1,6 +1,6 @@
 package com.yb.annotation.handler;
 
-import com.yb.annotation.anno.SetVaule;
+import com.yb.annotation.anno.Age;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -25,7 +25,7 @@ public class AnnoHandler {
 
     // 用@PointCut注解统一声明,然后在其它通知中引用该统一声明即可！
 //    @Pointcut("@annotation(com.yb.annotation.anno.SetVaule)")
-    @Pointcut(value = "execution(* com.yb.annotation.model..*.*(..)) && @annotation(com.yb.annotation.anno.SetVaule)")
+    @Pointcut(value = "execution(* com.yb.annotation.model..*.*(..)) && @annotation(com.yb.annotation.anno.Age)")
     public void setVaulePointcut() {
     }
 
@@ -56,17 +56,10 @@ public class AnnoHandler {
             Arrays.asList(fields).forEach(s -> {
                 //通过字段获取字段上的对应的注解(可以获取这个字段上的所有注解,也可以获取想要的注解,
                 // 只需传入对应的注解类的class(字节码))
-                SetVaule setVaule = s.getAnnotation(SetVaule.class);
+                Age setVaule = s.getAnnotation(Age.class);
                 //获取注解的参数(值)
-                String value = setVaule.value();
-                if (StringUtils.isNotBlank(value)) {
-                    try {
-                        s.set(setVaule, value);
-                    } catch (IllegalAccessException e) {
-                        log.info("给字段赋值失败");
-                        e.printStackTrace();
-                    }
-                }
+                Integer value = setVaule.value();
+               //
             });
         }
         return joinPoint.proceed();
