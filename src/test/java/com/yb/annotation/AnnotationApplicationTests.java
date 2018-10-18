@@ -1,14 +1,17 @@
 package com.yb.annotation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Sets;
 import com.yb.annotation.controller.TeacherController;
 import com.yb.annotation.model.Teacher;
 import lombok.extern.slf4j.Slf4j;
+import org.aopalliance.intercept.MethodInterceptor;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.data.Offset;
+import org.assertj.core.util.Lists;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -21,16 +24,62 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.persistence.EntityManager;
 import java.time.*;
 import java.util.*;
+import java.util.function.DoubleToIntFunction;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class AnnotationApplicationTests {
- public static final Logger log = LoggerFactory.getLogger(AnnotationApplicationTests.class);
+    public static final Logger log = LoggerFactory.getLogger(AnnotationApplicationTests.class);
 
     @Autowired
     private TeacherController teacherController;
+
+    @Test
+    public void contextLoads6() {
+        List<Teacher> list = Lists.newArrayList();
+        list.add(new Teacher(17));
+        list.add(new Teacher(18));
+        list.add(new Teacher(19));
+        //第一种写法---->用函数接口的这种写法,需要写指定类型类型的参数(声明),然后返回对应的判断
+        long count = list.stream().filter((Teacher teacher) -> {
+            return teacher.getAge()>=18;
+        }).count();
+        System.err.println(count);
+        //第二种写法---->以集合遍历的思维来,每个s表示遍历出来的Teacher对象,
+        //直接取即可(关于集合的Stram应该都可以用这种方式处理),很简洁
+        long count1 = list.stream().filter(s -> s.getAge() >= 18).count();
+        System.err.println(count1);
+    }
+
+    @Test
+    public void contextLoads5() {
+        Teacher t = new Teacher();
+        t.setAge(10);
+        //通过Function接口的apply来调用lambda表达式里的内容(这里相当于实现了apply方法)
+        Function<Teacher, Object> function = (Teacher teacher) -> {
+            return teacher.getAge();
+        };
+        Integer apply = (Integer) function.apply(t);
+        Object apply1 = function.apply(t);
+        System.err.println(apply);//10
+        System.err.println(apply1);//10
+        //通过(强转为自己接口)来调用get()来实现功能,注意参数的非空判断
+        Optional<Integer> integer1 = ((LambdaTest<Teacher>) ((Teacher teacher) -> {
+            Optional<Integer> integer = Optional.ofNullable(teacher == null ? 0 : teacher.getAge());
+            return integer;
+        })).get(null);
+        System.err.println(integer1);
+    }
+
+    @Test
+    public void contextLoads4() {
+        //通过lambda表达式开启一个线程
+        new Thread(() -> {
+            System.err.println("ssss");
+        }).run();
+    }
 
     @Test
     public void contextLoads3() {
@@ -40,14 +89,14 @@ public class AnnotationApplicationTests {
         String join = Joiner.on("&").skipNulls().join(list);
         System.err.println(join);//1&&ss&yy---->这里只跳过了null并没有跳过""
         try {
-        //不使用跳过空(""/null)含""和null的情况
-        String join1 = Joiner.on("&").join(list);//java.lang.NullPointerException
-        System.err.println(join1);
-        //不使用跳过空(""/null)含""的情况
-        List<String> list1 = Arrays.asList(new String[]{"1", "", "ss", "", "yy"});
-        String join2 = Joiner.on("&").join(list);//java.lang.NullPointerException
-        System.err.println(join2);
-        }catch (NullPointerException e){
+            //不使用跳过空(""/null)含""和null的情况
+            String join1 = Joiner.on("&").join(list);//java.lang.NullPointerException
+            System.err.println(join1);
+            //不使用跳过空(""/null)含""的情况
+            List<String> list1 = Arrays.asList(new String[]{"1", "", "ss", "", "yy"});
+            String join2 = Joiner.on("&").join(list);//java.lang.NullPointerException
+            System.err.println(join2);
+        } catch (NullPointerException e) {
             log.info("空指针异常");
         }
 
@@ -68,7 +117,7 @@ public class AnnotationApplicationTests {
 
     @Test
     public void contextLoads1() {
-        Teacher teacher = teacherController.findById("1");
+        Teacher teacher = teacherController.findById("1",19);
         System.err.println(teacher == null ? null : teacher.toString());
     }
 
@@ -77,7 +126,7 @@ public class AnnotationApplicationTests {
         Teacher teacher = new Teacher();
         teacher.setAge(19);
         teacher.setClassName("搞笑一班");
-        teacher.setId("222");
+        teacher.setId("999");
         teacher.setName("张老师");
         String s = teacherController.addTeacher(teacher);
         System.err.println(s);
@@ -119,14 +168,15 @@ public class AnnotationApplicationTests {
 
     @Test
     public void contextLoadsTest3() {
-        Instant now = Instant.now();
-        ZonedDateTime atZone = now.atZone(ZoneOffset.UTC);
+        Instant instant = Instant.now();
+        ZonedDateTime atZone = instant.atZone(ZoneOffset.UTC);
         System.err.println(atZone);
         //获取偏移时间
         OffsetDateTime offsetDateTime = atZone.toOffsetDateTime();
         System.err.println(offsetDateTime);
         //获取日期和时间
         LocalDateTime localDateTime = atZone.toLocalDateTime();
+        LocalDateTime localDateTime1 = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
         System.err.println(localDateTime);
         //获取日期
         LocalDate localDate = atZone.toLocalDate();
@@ -178,6 +228,6 @@ public class AnnotationApplicationTests {
         //输出转换的日期Date
         System.err.println(from);//Tue Oct 16 00:00:00 CST 2018
         System.err.println(from1);//Tue Oct 16 00:00:00 CST 2018
-
+        //
     }
 }

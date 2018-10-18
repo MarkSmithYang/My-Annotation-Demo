@@ -1,5 +1,6 @@
 package com.yb.annotation.model;
 
+import com.yb.annotation.anno.Age;
 import com.yb.annotation.anno.Gender;
 import java.io.Serializable;
 
@@ -31,6 +32,13 @@ public class Teacher implements Serializable {
      * 班级
      */
     private String className;
+
+    public Teacher() {
+    }
+
+    public Teacher(Integer age) {
+        this.age = age;
+    }
 
     public String getId() {
         return id;

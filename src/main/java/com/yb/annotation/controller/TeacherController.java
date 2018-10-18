@@ -1,10 +1,12 @@
 package com.yb.annotation.controller;
 
+import com.yb.annotation.anno.Age;
 import com.yb.annotation.model.Teacher;
 import com.yb.annotation.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Min;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +36,8 @@ public class TeacherController {
     }
 
     @GetMapping("bb")
-    public Teacher findById(String id) {
+    @Age(value = 122,message = "年龄不能小于122")
+    public Teacher findById(String id,@Age(value = 22,message = "年龄不能小于22") Integer age) {
         Teacher result = teacherService.findById(id);
         return result;
     }
