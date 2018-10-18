@@ -2,6 +2,9 @@ package com.yb.annotation.model;
 
 import com.yb.annotation.anno.Age;
 import com.yb.annotation.anno.Gender;
+import com.yb.annotation.anno.MyNotNull;
+
+import javax.validation.constraints.Min;
 import java.io.Serializable;
 
 /**
@@ -21,6 +24,8 @@ public class Teacher implements Serializable {
     /**
      * 姓名
      */
+    @MyNotNull
+    @Min.List(@Min(value = 110,message = "最小110"))
     private String name;
 
     /**

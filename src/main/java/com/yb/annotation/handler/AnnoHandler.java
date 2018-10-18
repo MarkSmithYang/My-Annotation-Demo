@@ -1,6 +1,7 @@
 package com.yb.annotation.handler;
 
 import com.yb.annotation.anno.Age;
+import com.yb.annotation.anno.Ages;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.JavaVersion;
 import org.apache.commons.lang3.StringUtils;
@@ -36,13 +37,19 @@ public class AnnoHandler {
     // 用@PointCut注解统一声明,然后在其它通知中引用该统一声明即可！
     //@Pointcut("@annotation(com.yb.annotation.anno.SetVaule)")
 //    @Pointcut(value = "execution(* com.yb.annotation.*..*.*(..)) && @annotation(com.yb.annotation.anno.Age)")
-    @Pointcut(value = "execution(* com.yb.annotation.*..*.*(..)) && @annotation(com.yb.annotation.anno.Age)")
+    @Pointcut(value = "execution(* com.yb.annotation.*..*.*(..)) && @annotation(org.springframework.web.bind.annotation.GetMapping)")
+//    @Pointcut(value = "execution(* com.yb.annotation.*..*.*(..)) && @annotation(com.yb.annotation.anno.Age)")
     public void setVaulePointcut() {
     }
 
     @Before("setVaulePointcut()")
     public void beforeTest() {
         System.err.println("切之前");
+    }
+
+    @After("setVaulePointcut()")
+    public void afterTest() {
+        System.err.println("切之后--------");
     }
 
     @Around("setVaulePointcut()")
@@ -67,9 +74,26 @@ public class AnnoHandler {
                 Annotation[] annotations = parameterAnnotations[i];
                 for (int j = 0; j < annotations.length; j++) {
                     Annotation annotation = annotations[j];
-                    Class<? extends Annotation> type = annotation.annotationType();
-                    //获取参数上的指定注解(需要做如下判断,只获取需要的)
+                    //获取参数上的指定注解(需要做如下判断,只获取需要的)---注意需要首先判断有没有重复注解的存在
+                    //处理多个注解的部分
+                    if(annotation instanceof Ages){
+                        System.err.println("处理重复注解的逻辑");
+                        //注解要么有默认值,要么必填,所以取出的数组必然不会为空
+                        Age[] values = ((Ages) annotation).value();
+                        //保险的做法还是判断所属关系,主要是担心@Ages里面有除了@Age的注解,而导致异常错误
+                        for(Age age:values){
+                            String message = age.message();
+                            int value = age.value();
+                            if (args[i] instanceof Integer) {
+                                if ((Integer) args[i] < value) {
+                                    log.info(message);
+                                }
+                            };
+                        }
+                    }
+                    //处理单个注解的部分
                     if (annotation instanceof Age) {
+                        System.err.println("处理单个注解的逻辑");
                         Age age = (Age) annotation;
                         Integer value = age.value();
                         String message = age.message();

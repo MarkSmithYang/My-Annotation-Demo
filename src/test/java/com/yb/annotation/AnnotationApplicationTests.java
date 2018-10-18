@@ -1,11 +1,13 @@
 package com.yb.annotation;
 
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Sets;
 import com.yb.annotation.controller.TeacherController;
+import com.yb.annotation.handler.MyNotNullHandler;
 import com.yb.annotation.model.Teacher;
 import lombok.extern.slf4j.Slf4j;
 import org.aopalliance.intercept.MethodInterceptor;
@@ -117,7 +119,7 @@ public class AnnotationApplicationTests {
 
     @Test
     public void contextLoads1() {
-        Teacher teacher = teacherController.findById("1",19);
+        Teacher teacher = teacherController.findById("1",1);
         System.err.println(teacher == null ? null : teacher.toString());
     }
 
@@ -126,9 +128,11 @@ public class AnnotationApplicationTests {
         Teacher teacher = new Teacher();
         teacher.setAge(19);
         teacher.setClassName("搞笑一班");
-        teacher.setId("999");
-        teacher.setName("张老师");
+        teacher.setId("9999");
+        teacher.setName(null);
         String s = teacherController.addTeacher(teacher);
+        //方便测试,不然每次都要改id
+        teacherController.deleteById(teacher.getId());
         System.err.println(s);
     }
 

@@ -12,7 +12,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.xml.transform.Result;
 import java.util.*;
 
 /**
@@ -69,9 +68,9 @@ public class TeacherService {
         objects.add("2");
         Map<String, Object> params = new LinkedHashMap<>();
         params.put("aa", objects);
-        params.put("na", "jack");
+//        params.put("na", "jack");
 
-        List<Teacher> list = template.query("select * from teacher where id in (:aa) and `name`=:na ", params, (resultSet, i) -> {
+        List<Teacher> list = template.query("select * from teacher where id in (:aa) ", params, (resultSet, i) -> {
             Teacher teacher = new Teacher();
             teacher.setClassName(resultSet.getString("class_name"));
             teacher.setId(resultSet.getString("id"));
@@ -79,6 +78,14 @@ public class TeacherService {
             teacher.setAge(resultSet.getInt("age"));
             return teacher;
         });
+//        List<Teacher> list = template.query("select * from teacher where id in (:aa) and `name`=:na ", params, (resultSet, i) -> {
+//            Teacher teacher = new Teacher();
+//            teacher.setClassName(resultSet.getString("class_name"));
+//            teacher.setId(resultSet.getString("id"));
+//            teacher.setName(resultSet.getString("name"));
+//            teacher.setAge(resultSet.getInt("age"));
+//            return teacher;
+//        });
        //因为查询的是一个对象,所以只取一个,这里使用List来封装数据,可以容错
         return CollectionUtils.isNotEmpty(list)?list.get(0):null;
         //-------------------------------------------------------------------------------------------------------------
@@ -154,5 +161,23 @@ public class TeacherService {
 
         List<Teacher> result = new ArrayList<>();
         return result;
+    }
+
+    /**
+     * 根据id删除Teahcer信息
+     * @param id
+     * @return
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public String deleteById(String id) {
+        //删除前需要确定有东西可删,就是先查询
+        Teacher byId = findById(id);
+        if(byId==null){
+            throw new NoSuchFieldError("id不正确");
+        }
+        jdbcTemplate.update("delete from teacher where id = ?", preparedStatement -> {
+            preparedStatement.setObject(1, id);
+        });
+        return "删除成功";
     }
 }
