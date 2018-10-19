@@ -2,8 +2,6 @@ package com.yb.annotation.anno;
 
 
 import java.lang.annotation.*;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.PARAMETER;
 
 /**
  * @author yangbiao
@@ -11,16 +9,15 @@ import static java.lang.annotation.ElementType.PARAMETER;
  * @date 2018/10/10
  */
 @Documented
-@Repeatable(Ages.class)
+@Repeatable(MinAges.class)
 //@Target({ METHOD,PARAMETER})
 @Target({ElementType.PARAMETER})//实测证明,想要获取参数的注解,必须要能注解到方法,不然不会生效
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited//此注解允许被使用类的子类继承(实现接口和重载方法不遵循此)
-public @interface Age {
+public @interface MinAge {
 
     int value();
-
-    String message() default "";
+    String message() default "参数值不能小于";
 
 }
 

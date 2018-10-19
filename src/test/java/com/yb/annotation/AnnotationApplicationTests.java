@@ -1,34 +1,21 @@
 package com.yb.annotation;
 
-import com.alibaba.fastjson.JSONObject;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
-import com.google.common.collect.Sets;
 import com.yb.annotation.controller.TeacherController;
-import com.yb.annotation.handler.MyNotNullHandler;
 import com.yb.annotation.model.Teacher;
-import lombok.extern.slf4j.Slf4j;
-import org.aopalliance.intercept.MethodInterceptor;
 import org.apache.commons.lang3.StringUtils;
-import org.assertj.core.data.Offset;
 import org.assertj.core.util.Lists;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import javax.persistence.EntityManager;
 import java.time.*;
 import java.util.*;
-import java.util.function.DoubleToIntFunction;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -126,11 +113,11 @@ public class AnnotationApplicationTests {
     @Test
     public void contextLoads() {
         Teacher teacher = new Teacher();
-        teacher.setAge(19);
-        teacher.setClassName("搞笑一班");
+        teacher.setAge(1);
+        teacher.setClassName("男");
         teacher.setId("9999");
-        teacher.setName(null);
-        String s = teacherController.addTeacher(teacher);
+        teacher.setName("啊啊");
+        String s = teacherController.addTeacher(teacher,1);
         //方便测试,不然每次都要改id
         teacherController.deleteById(teacher.getId());
         System.err.println(s);

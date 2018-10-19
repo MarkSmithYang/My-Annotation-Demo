@@ -1,10 +1,7 @@
 package com.yb.annotation.model;
 
-import com.yb.annotation.anno.Age;
 import com.yb.annotation.anno.Gender;
 import com.yb.annotation.anno.MyNotNull;
-
-import javax.validation.constraints.Min;
 import java.io.Serializable;
 
 /**
@@ -18,24 +15,24 @@ public class Teacher implements Serializable {
     /**
      * id
      */
-    @Gender(value = Gender.GenderType.FEMALE)//把注解的参数值设定为自己定义的枚举,让使用者选择自己定义的枚举
     private String id;
 
     /**
      * 姓名
      */
     @MyNotNull
-    @Min.List(@Min(value = 110,message = "最小110"))
     private String name;
 
     /**
      * 年龄
      */
+    @MyNotNull
     private Integer age;
 
     /**
-     * 班级
+     * 性别(班级改用)
      */
+    @Gender({Gender.GenderType.FEMALE, Gender.GenderType.MALE})
     private String className;
 
     public Teacher() {

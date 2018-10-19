@@ -14,7 +14,7 @@ import static java.lang.annotation.ElementType.*;
 @Target({PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
-public @interface Ages {
+public @interface MinAges {
 
-    Age[] value();
+    MinAge[] value();
 }
