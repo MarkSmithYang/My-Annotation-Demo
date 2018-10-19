@@ -31,8 +31,8 @@ public class TeacherController {
     }
 
     @GetMapping("queryForList")
-    public List<Teacher> queryForList() {
-        List<Teacher> result = teacherService.queryForList();
+    public List<Map<String, Object>> queryForList() {
+        List<Map<String, Object>> result = teacherService.queryForList();
         return result;
     }
 

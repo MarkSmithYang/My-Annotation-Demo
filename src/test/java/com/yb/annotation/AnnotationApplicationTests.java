@@ -1,5 +1,6 @@
 package com.yb.annotation;
 
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
@@ -24,6 +25,13 @@ public class AnnotationApplicationTests {
 
     @Autowired
     private TeacherController teacherController;
+
+    @Test
+    public void contextLoads7() {
+        List<Map<String, Object>> maps = teacherController.queryForList();
+        //本身Json是实现了Map的,是key和value,所以不需要在此json化
+        System.err.println(maps);
+    }
 
     @Test
     public void contextLoads6() {

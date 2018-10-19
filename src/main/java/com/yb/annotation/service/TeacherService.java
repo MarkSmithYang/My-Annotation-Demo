@@ -86,8 +86,8 @@ public class TeacherService {
 //            teacher.setAge(resultSet.getInt("age"));
 //            return teacher;
 //        });
-       //因为查询的是一个对象,所以只取一个,这里使用List来封装数据,可以容错
-        return CollectionUtils.isNotEmpty(list)?list.get(0):null;
+        //因为查询的是一个对象,所以只取一个,这里使用List来封装数据,可以容错
+        return CollectionUtils.isNotEmpty(list) ? list.get(0) : null;
         //-------------------------------------------------------------------------------------------------------------
     }
 
@@ -153,18 +153,18 @@ public class TeacherService {
 
     /**
      * 查询Teacher的List信息
+     *
      * @return
      */
-    public List<Teacher> queryForList() {
-        List<Map<String, Object>> maps = jdbcTemplate.queryForList("select * from teacher");
-
-
-        List<Teacher> result = new ArrayList<>();
+    public List<Map<String, Object>> queryForList() {
+        //本身Json是实现了Map的,是key和value,所以不需要在此json化
+        List<Map<String, Object>> result = jdbcTemplate.queryForList("select * from teacher");
         return result;
     }
 
     /**
      * 根据id删除Teahcer信息
+     *
      * @param id
      * @return
      */
@@ -172,7 +172,7 @@ public class TeacherService {
     public String deleteById(String id) {
         //删除前需要确定有东西可删,就是先查询
         Teacher byId = findById(id);
-        if(byId==null){
+        if (byId == null) {
             throw new NoSuchFieldError("id不正确");
         }
         jdbcTemplate.update("delete from teacher where id = ?", preparedStatement -> {
